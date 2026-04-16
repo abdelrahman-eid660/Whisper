@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://32.193.216.231/Whisper',
+  apiBaseUrl: '/api/Whisper',
   pollInterval: 10000, // 10 seconds
 };

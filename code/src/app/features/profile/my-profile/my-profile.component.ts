@@ -13,7 +13,7 @@ import { NgIf, NgForOf, DatePipe } from "@angular/common";
   standalone: true,
   imports: [RouterLink, LoaderComponent, NgIf, NgForOf, DatePipe],
   template: `
-    <div class="page-container max-w-2xl">
+    <div class="page-container  w-full max-w-2xl mx-auto px-4 sm:px-6 lg:px-0">
       @if (loading()) {
         <app-loader [fullPage]="true" />
       } @else {
@@ -21,7 +21,7 @@ import { NgIf, NgForOf, DatePipe } from "@angular/common";
           <!-- Cover + Avatar card -->
           <div class="card p-0 overflow-hidden">
             <div
-              class="h-100 sm:h-48 w-full relative bg-gradient-to-br from-whisper-500 to-rose-500"
+              class="aspect-[16/7] w-full relative bg-gradient-to-br from-whisper-500 to-rose-500"
             >
               @if (authStore.user()?.profileCover) {
                 <img
@@ -291,14 +291,11 @@ export class MyProfileComponent implements OnInit {
     }
     this.userService.getProfile(id).subscribe({
       next: (res) => {
-        console.log({ res });
-
         if (res.data) this.authStore.setUser(res.data);
         this.loading.set(false);
       },
       error: (err) => {
         this.loading.set(false);
-        console.log({ err });
       },
     });
   }

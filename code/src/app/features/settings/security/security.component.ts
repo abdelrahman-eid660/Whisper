@@ -47,9 +47,9 @@ function passwordMatch(c: AbstractControl) {
 
           <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="space-y-4">
             <div>
-              <label class="label">Old Password</label>
+              <label class="label" for="oldPassword">Old Password</label>
               <div class="relative">
-                <input [type]="showPw() ? 'text' : 'password'" formControlName="oldPassword"
+                <input id="oldPassword" [type]="showPw() ? 'text' : 'password'" formControlName="oldPassword"
                   placeholder="Enter your current password"
                   class="input-base pr-10"
                   [class.border-rose-400]="passwordForm.controls['oldPassword'].invalid && passwordForm.controls['oldPassword'].touched" />
@@ -66,9 +66,9 @@ function passwordMatch(c: AbstractControl) {
               }
             </div>
             <div>
-              <label class="label">New Password</label>
+              <label class="label" for="newPassword">New Password</label>
               <div class="relative">
-                <input [type]="showPw() ? 'text' : 'password'" formControlName="newPassword"
+                <input id="newPassword" [type]="showPw() ? 'text' : 'password'" formControlName="newPassword"
                   placeholder="Min 8, uppercase, number, symbol"
                   class="input-base pr-10"
                   [class.border-rose-400]="passwordForm.controls['newPassword'].invalid && passwordForm.controls['newPassword'].touched" />
@@ -86,8 +86,8 @@ function passwordMatch(c: AbstractControl) {
             </div>
 
             <div>
-              <label class="label">Confirm Password</label>
-              <input type="password" formControlName="confirmPassword" placeholder="Repeat password"
+              <label class="label" for="confirmPassword">Confirm Password</label>
+              <input type="password" id="confirmPassword" formControlName="confirmPassword" placeholder="Repeat password"
                 class="input-base"
                 [class.border-rose-400]="passwordForm.hasError('passwordMismatch') && passwordForm.controls['confirmPassword'].touched" />
               @if (passwordForm.hasError('passwordMismatch') && passwordForm.controls['confirmPassword'].touched) {

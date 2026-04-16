@@ -183,9 +183,7 @@ export class SignupComponent {
     this.error.set('');
     this.authService.signup(this.form.value as ISignup).subscribe({
       next: (res) => {
-        this.sent.set(true);
-        console.log({res});
-        
+        this.sent.set(true);        
         // Navigate to OTP confirm page
         setTimeout(() => {
           this.router.navigate(['/auth/confirm-email'], {
@@ -193,9 +191,7 @@ export class SignupComponent {
           });
         }, 1200);
       },
-      error: err => {
-        console.log({err});
-        
+      error: err => {        
         this.error.set(extractBackendError(err));
         this.loading.set(false);
       },

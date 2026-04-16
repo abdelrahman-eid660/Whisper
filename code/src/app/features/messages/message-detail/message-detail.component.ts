@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from "@angular/core";
+import { Component, inject, signal, OnInit, computed } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MessageService } from "../../../core/services/message.service";
 import { MessageStore } from "../../../shared/stores/message.store";
@@ -203,7 +203,7 @@ import { AuthStore } from "../../../shared/stores/auth.store";
     >
       <div class="space-y-4">
         <p class="text-sm text-[rgb(var(--color-muted))]">
-          This action cannot be undone. The message will be permanently deleted.
+          {{deleteMessageText()}}
         </p>
         <div class="flex gap-3">
           <button
@@ -249,8 +249,6 @@ export class MessageDetailComponent implements OnInit {
     this.messageService.getMessage(id).subscribe({
       next: (res) => {
         if (res.data) {
-          console.log({ res });
-
           this.message.set(res.data);
           this.messageStore.setSelected(res.data);
           const currentUser = this.authStore.user();
@@ -268,6 +266,13 @@ export class MessageDetailComponent implements OnInit {
       error: () => this.loading.set(false),
     });
   }
+  deleteMessageText = computed(() => {
+  const msg = this.message();
+  if (!msg) return "";
+  return msg.direction === "sent"
+    ? "You’re about to delete a message you sent. This action cannot be undone."
+    : "This action cannot be undone. The message will be permanently deleted.";
+  });
   sendAgain(): void {
     const msg = this.message();
     if (!msg?.receiverId) return;
@@ -279,7 +284,7 @@ export class MessageDetailComponent implements OnInit {
     });
   }
   deleteMessage(): void {
-    const id = this.message()?._id;
+    const id = this.message()?._id;    
     if (!id) return;
     this.deleting.set(true);
     this.messageService.deleteMessage(id).subscribe({
@@ -288,7 +293,8 @@ export class MessageDetailComponent implements OnInit {
         this.uiStore.success("Deleted", "Message removed successfully.");
         this.router.navigate(["/messages"]);
       },
-      error: () => this.deleting.set(false),
+      error: (err) => {this.deleting.set(false) ;
+      },
     });
   }
 

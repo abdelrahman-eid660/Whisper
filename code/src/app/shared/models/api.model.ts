@@ -37,10 +37,10 @@ export interface PaginatedResponse<T> {
 /** Extract first Joi validation error message from backend shape */
 export function extractBackendError(err: unknown): string {
   try {
-    const e = err as { error?: { message?: string; extra?: { errors?: Array<{ details?: Array<{ message: string }> }> } } };
+    const e = err as { error?: { errorMessage?: string; extra?: { errors?: Array<{ details?: Array<{ message: string }> }> } } };
     const details = e?.error?.extra?.errors?.[0]?.details?.[0]?.message;
     if (details) return details;
-    return e?.error?.message ?? 'Something went wrong.';
+    return e?.error?.errorMessage ?? 'Something went wrong.';
   } catch {
     return 'Something went wrong.';
   }

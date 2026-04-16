@@ -92,16 +92,12 @@ export class EditProfileComponent {
     fd.append('profilePicture', file);
     this.uploadingProfile.set(true);
     this.userService.updateProfilePicture(fd).subscribe({
-      next: res => {
-        console.log({res});
-        
+      next: res => {        
         if (res.data) this.authStore.setUser(res.data);
         this.uiStore.success('Profile photo updated!');
         this.uploadingProfile.set(false);
       },
-      error: err => {
-        console.log({err});
-        
+      error: err => {        
         this.uiStore.error('Upload failed', extractBackendError(err));
         this.uploadingProfile.set(false);
       },
@@ -113,16 +109,12 @@ export class EditProfileComponent {
     fd.append('profileCover', file);
     this.uploadingCover.set(true);
     this.userService.updateCoverPicture(fd).subscribe({
-      next: res => {
-        console.log({res2 : res});
-        
-        if (res.data) this.authStore.setUser(res.data);
+      next: res => {        
+        if (res.data) this.authStore.setUser({...res.data , profilePicture : res.data.profilePicture});
         this.uiStore.success('Cover photo updated!');
         this.uploadingCover.set(false);
       },
-      error: err => {
-        console.log({err2 : err});
-        
+      error: err => {        
         this.uiStore.error('Upload failed', extractBackendError(err));
         this.uploadingCover.set(false);
       },

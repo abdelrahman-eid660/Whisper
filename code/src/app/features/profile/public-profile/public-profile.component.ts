@@ -282,12 +282,13 @@ export class PublicProfileComponent implements OnInit {
   private messageService = inject(MessageService);
   private uiStore = inject(UiStore);
   private fb = inject(FormBuilder);
-  sendAsUser = signal(false);
+  ReciverId = signal<string | null>(null);
+  sendAsUser = signal<boolean>(false);
   user = signal<PublicUser | null>(null);
-  loadingProfile = signal(true);
-  sending = signal(false);
-  sent = signal(false);
-  showAttach = signal(false);
+  loadingProfile = signal<boolean>(true);
+  sending = signal<boolean>(false);
+  sent = signal<boolean>(false);
+  showAttach = signal<boolean>(false);
   attachedFile = signal<File | null>(null);
   attachedFiles = signal<File[]>([]);
 
@@ -308,16 +309,15 @@ export class PublicProfileComponent implements OnInit {
   ngOnInit(): void {
     // Route is /p/:username – backend endpoint is GET /profile/:id
     // We use the username as the id param (backend accepts both)
-    const id = this.route.snapshot.paramMap.get("id")!;
-    this.userService.getPublicProfile(id).subscribe({
-      next: (res) => {
-        console.log({ res });
-
-        if (res.data) this.user.set(res.data);
+     this.ReciverId.set(this.route.snapshot.paramMap.get("id")) as unknown as string
+     if(!this.ReciverId())return
+     this.userService.getPublicProfile(this.ReciverId() as string).subscribe({
+       next: (res) => {
+         if (res.data) this.user.set(res.data);
         this.loadingProfile.set(false);
       },
       error: (err) => {
-        (this.loadingProfile.set(false), console.log({ err }));
+        (this.loadingProfile.set(false));
       },
     });
   }
@@ -328,6 +328,10 @@ export class PublicProfileComponent implements OnInit {
     this.attachedFiles.update((files) => files.filter((f) => f !== file));
   }
   send(): void {
+    if (this.ReciverId() as unknown  as string === this.user()!.viewerId as string) {
+      this.uiStore.error("Invalid action", "You can't send a message to yourself");
+      return;
+    }
     if (
       !this.form.controls["content"].value &&
       this.attachedFiles().length === 0
@@ -347,13 +351,11 @@ export class PublicProfileComponent implements OnInit {
       fd.append("attachments", file);
     });
     this.messageService.sendMessage(this.user()!._id, fd).subscribe({
-      next: () => {
+      next: (res) => {        
         this.sent.set(true);
         this.sending.set(false);
       },
-      error: (err) => {
-        console.log({err});
-        
+      error: (err) => {        
         this.uiStore.error("Failed to send", extractBackendError(err));
         this.sending.set(false);
       },

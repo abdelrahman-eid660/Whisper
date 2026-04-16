@@ -36,28 +36,28 @@ imports: [ReactiveFormsModule, NgIf, LoaderComponent],
           <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
             <!-- Username -->
             <div>
-              <label class="label">Username</label>
-              <input type="text" formControlName="userName" placeholder="Enter username" class="input-base" [class.border-rose-400]="fc['userName'].invalid && fc['userName'].touched" />
+              <label class="label" for="userName">Username</label>
+              <input type="text" id="userName" formControlName="userName" placeholder="Enter username" class="input-base" [class.border-rose-400]="fc['userName'].invalid && fc['userName'].touched" />
               <p class="error-text" *ngIf="fc['userName'].invalid && fc['userName'].touched">Username is required.</p>
             </div>
 
             <!-- Phone -->
             <div>
-              <label class="label">Phone</label>
-              <input type="text" formControlName="phone" placeholder="Enter phone number" class="input-base" [class.border-rose-400]="fc['phone'].invalid && fc['phone'].touched" />
+              <label class="label" for="Phone">Phone</label>
+              <input type="text" id="Phone" formControlName="phone" placeholder="Enter phone number" class="input-base" [class.border-rose-400]="fc['phone'].invalid && fc['phone'].touched" />
               <p class="error-text" *ngIf="fc['phone'].invalid && fc['phone'].touched">Please enter a valid phone number.</p>
             </div>
 
             <!-- Date of Birth -->
             <div>
-              <label class="label">Date of Birth</label>
-              <input type="date" formControlName="DOB" class="input-base" [class.border-rose-400]="fc['DOB'].invalid && fc['DOB'].touched" />
+              <label class="label" for="DOB">Date of Birth</label>
+              <input type="date" id="DOB" formControlName="DOB" class="input-base" [class.border-rose-400]="fc['DOB'].invalid && fc['DOB'].touched" />
             </div>
 
             <!-- Gender -->
             <div>
-              <label class="label">Gender</label>
-              <select formControlName="gender" class="input-base" [class.border-rose-400]="fc['gender'].invalid && fc['gender'].touched">
+              <label class="label" for="gender">Gender</label>
+              <select formControlName="gender" id="gender" class="input-base" [class.border-rose-400]="fc['gender'].invalid && fc['gender'].touched">
                 <option [value]="form.get('gender')?.value">Male</option>
                 <option [value]="form.get('gender')?.value">Female</option>
               </select>
@@ -65,8 +65,8 @@ imports: [ReactiveFormsModule, NgIf, LoaderComponent],
 
             <!-- Bio -->
             <div>
-              <label class="label">Bio</label>
-              <textarea formControlName="bio" placeholder="Tell us about yourself" class="input-base" [class.border-rose-400]="fc['bio'].invalid && fc['bio'].touched"></textarea>
+              <label class="label" for="bio">Bio</label>
+              <textarea formControlName="bio" id="bio" placeholder="Tell us about yourself" class="input-base" [class.border-rose-400]="fc['bio'].invalid && fc['bio'].touched"></textarea>
               <p class="error-text" *ngIf="fc['bio'].invalid && fc['bio'].touched">Bio is required.</p>
             </div>
 
@@ -111,17 +111,14 @@ ngOnInit(): void {
   this.userService.getProfile(id).subscribe({
     next: (res) => {
       this.loading.set(true)
-      console.log({res});
         this.form.patchValue(res.data as User);
         if (res.data?.DOB) {
           const formattedDate = new Date(res.data?.DOB).toISOString().split('T')[0];
-          console.log({formattedDate});
           this.form.get('DOB')?.setValue(formattedDate);
         }
         this.loading.set(false)
     },
     error: (err) => {
-      console.log({ err });
       this.uiStore.error('Error fetching profile');
     }
   });
@@ -136,14 +133,12 @@ ngOnInit(): void {
     this.loading.set(true);
     this.userService.updateAccount(this.authStore.user()?._id as string , this.form.value as IEditProfile).subscribe({
       next: res => {
-        console.log({ res });
         if (res.data) {
           this.authStore.setUser(res.data);  // Update user data in store
           this.uiStore.success('Profile updated successfully!');
         }
       },
       error: err => {
-        console.log({ err });
         this.uiStore.error('Update failed', extractBackendError(err));
       },
       complete: () => {

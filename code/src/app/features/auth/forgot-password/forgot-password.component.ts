@@ -23,8 +23,8 @@ import { extractBackendError } from '../../../shared/models/api.model';
 
       <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
         <div>
-          <label class="label">Email</label>
-          <input type="email" formControlName="email" placeholder="you@example.com"
+          <label class="label" for="email">Email</label>
+          <input type="email" id="email" formControlName="email" placeholder="you@example.com"
             class="input-base" [class.border-rose-400]="form.controls['email'].invalid && form.controls['email'].touched" />
           @if (form.controls['email'].invalid && form.controls['email'].touched) {
             <p class="error-text">Please enter a valid email.</p>

@@ -26,9 +26,9 @@ function passwordMatch(c: AbstractControl) {
 
       <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
         <div>
-          <label class="label">New Password</label>
+          <label class="label" for="newPassword">New Password</label>
           <div class="relative">
-            <input [type]="showPw() ? 'text' : 'password'" formControlName="password"
+            <input id="newPassword" [type]="showPw() ? 'text' : 'password'" formControlName="password"
               placeholder="Min 8, uppercase, number, symbol"
               class="input-base pr-10"
               [class.border-rose-400]="form.controls['password'].invalid && form.controls['password'].touched" />
@@ -48,8 +48,8 @@ function passwordMatch(c: AbstractControl) {
         </div>
 
         <div>
-          <label class="label">Confirm Password</label>
-          <input type="password" formControlName="confirmPassword" placeholder="Repeat password"
+          <label class="label" for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" formControlName="confirmPassword" placeholder="Repeat password"
             class="input-base"
             [class.border-rose-400]="form.hasError('passwordMismatch') && form.controls['confirmPassword'].touched" />
           @if (form.hasError('passwordMismatch') && form.controls['confirmPassword'].touched) {

@@ -22,8 +22,8 @@ import { ILogin } from '../../../shared/models/auth.model';
       <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
         <!-- email -->
         <div>
-          <label class="label">Email</label>
-          <input type="email" formControlName="email" placeholder="you@example.com"
+          <label class="label" for="email">Email</label>
+          <input type="email" id="email" formControlName="email" placeholder="you@example.com"
             class="input-base" [class.border-rose-400]="fc['email'].invalid && fc['email'].touched" />
           @if (fc['email'].invalid && fc['email'].touched) {
             <p class="error-text">Please enter a valid email.</p>
@@ -33,11 +33,11 @@ import { ILogin } from '../../../shared/models/auth.model';
         <!-- password -->
         <div>
           <div class="flex items-center justify-between mb-1.5">
-            <label class="label !mb-0">Password</label>
+            <label class="label !mb-0" for="password">Password</label>
             <a routerLink="/auth/forgot-password" class="text-xs link">Forgot password?</a>
           </div>
           <div class="relative">
-            <input [type]="showPw() ? 'text' : 'password'" formControlName="password"
+            <input id="password" [type]="showPw() ? 'text' : 'password'" formControlName="password"
               placeholder="••••••••" class="input-base pr-10"
               [class.border-rose-400]="fc['password'].invalid && fc['password'].touched" />
             <button type="button" (click)="showPw.set(!showPw())"
@@ -109,9 +109,7 @@ handleGoogle(token: string) {
   this.loading.set(true);
 
   this.authService.signupWithGmail({ idToken: token }).subscribe({
-    next: (res) => {
-      console.log({res});
-      
+    next: (res) => {      
       const data = res.data?.data;
       if(!data)return
       this.authStore.setAuth(
@@ -124,7 +122,6 @@ handleGoogle(token: string) {
       this.loading.set(false);
     },
     error: (err) => {
-      console.log(err);
       this.error.set('Google login failed');
       this.loading.set(false);
     }
@@ -141,9 +138,7 @@ handleGoogle(token: string) {
     this.loading.set(true);
     this.error.set('');
     this.authService.login(this.form.value as ILogin).subscribe({
-      next: res => {
-        console.log({res});
-        
+      next: res => {        
         const payload = res.data;
 
         // ── Case 1: 2FA enabled → backend returns a plain string ──────────
@@ -170,9 +165,7 @@ handleGoogle(token: string) {
         }
         this.loading.set(false);
       },
-      error: err => {
-        console.log({err});
-        
+      error: err => {        
         this.error.set(extractBackendError(err.errorMessage));
         this.loading.set(false);
       },

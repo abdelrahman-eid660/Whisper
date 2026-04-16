@@ -8,12 +8,8 @@ export interface User {
   bio?: string;
   DOB?: Date | any;
   gender?: Gender | any;
-  profilePicture?: {
-    secure_url: string;
-  };
-  profileCover?: {
-    secure_url: string;
-  };
+  profilePicture?: string | undefined
+  profileCover?: string | undefined;
   confirmEmail: boolean;
   twoStepVerification: boolean;
   createdAt: string;
@@ -25,6 +21,7 @@ export interface User {
 
 export interface PublicUser {
   _id: string;
+  viewerId: string;
   userName?: string;
   bio?: string;
   profilePicture?: string;

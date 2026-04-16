@@ -23,7 +23,7 @@ export class MessageService {
   }
 
   deleteMessage(messageId: string): Observable<ApiResponse<void>> {
-    return this.http.delete<ApiResponse<void>>(`${this.base}/${messageId}`);
+    return this.http.delete<ApiResponse<void>>(`${this.base}/deleteMessage/${messageId}`);
   }
   markAsRead(messageId: string) {
     return this.http.patch<ApiResponse<void>>(`${this.base}/${messageId}/read`, {});
