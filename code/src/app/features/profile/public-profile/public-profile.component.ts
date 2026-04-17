@@ -289,7 +289,7 @@ export class PublicProfileComponent implements OnInit {
   sending = signal<boolean>(false);
   sent = signal<boolean>(false);
   showAttach = signal<boolean>(false);
-  attachedFile = signal<File | null>(null);
+  // attachedFile = signal<File | null>(null);
   attachedFiles = signal<File[]>([]);
 
   form = this.fb.group({
@@ -369,7 +369,7 @@ export class PublicProfileComponent implements OnInit {
   reset(): void {
     this.sent.set(false);
     this.form.reset();
-    this.attachedFile.set(null);
+    this.attachedFiles.set([]);
     this.showAttach.set(false);
   }
 }
