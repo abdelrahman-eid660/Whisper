@@ -313,10 +313,14 @@ export class PublicProfileComponent implements OnInit {
      if(!this.ReciverId())return
      this.userService.getPublicProfile(this.ReciverId() as string).subscribe({
        next: (res) => {
+        console.log({res});
+        
          if (res.data) this.user.set(res.data);
         this.loadingProfile.set(false);
       },
       error: (err) => {
+        console.log(err);
+        
         (this.loadingProfile.set(false));
       },
     });

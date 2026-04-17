@@ -111,9 +111,9 @@ import { NgIf, NgForOf, DatePipe } from "@angular/common";
             <div class="card text-center py-4">
               <p
                 class="font-display text-2xl font-bold"
-                [class.gradient-text]="authStore.user()?.twoStepVerification"
+                [class.gradient-text]="authStore.user()?.isTwoFactorEnabled"
               >
-                {{ authStore.user()?.twoStepVerification ? "ON" : "OFF" }}
+                {{ authStore.user()?.isTwoFactorEnabled ? "ON" : "OFF" }}
               </p>
               <p class="text-xs text-[rgb(var(--color-muted))] mt-1">2FA</p>
             </div>
@@ -291,6 +291,8 @@ export class MyProfileComponent implements OnInit {
     }
     this.userService.getProfile(id).subscribe({
       next: (res) => {
+        console.log(res);
+        
         if (res.data) this.authStore.setUser(res.data);
         this.loading.set(false);
       },

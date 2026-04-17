@@ -55,7 +55,7 @@ import { AuthStore } from "../../../shared/stores/auth.store";
                     <div
                       class="w-full h-full bg-gradient-to-br from-whisper-400 to-whisper-600 flex items-center justify-center"
                     >
-                      <svg class="w-5 h-5 text-white" ...></svg>
+                      <svg class="w-5 h-5 text-white"></svg>
                     </div>
                   }
                 </div>
@@ -293,7 +293,9 @@ export class MessageDetailComponent implements OnInit {
         this.uiStore.success("Deleted", "Message removed successfully.");
         this.router.navigate(["/messages"]);
       },
-      error: (err) => {this.deleting.set(false) ;
+      error: (err) => {this.deleting.set(false)
+        console.log(err);
+         ;
       },
     });
   }

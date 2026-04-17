@@ -114,7 +114,7 @@ function passwordMatch(c: AbstractControl) {
               <h2 class="font-semibold text-sm">Two-Factor Authentication</h2>
               <p class="text-xs text-[rgb(var(--color-muted))]">Extra security for your account</p>
             </div>
-            @if (authStore.user()?.twoStepVerification) {
+            @if (authStore.user()?.isTwoFactorEnabled) {
               <span class="badge bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
                 <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
@@ -126,7 +126,7 @@ function passwordMatch(c: AbstractControl) {
             }
           </div>
 
-          @if (!authStore.user()?.twoStepVerification) {
+          @if (!authStore.user()?.isTwoFactorEnabled) {
             <p class="text-sm text-[rgb(var(--color-muted))] leading-relaxed">
               2FA adds a verification code step when you log in, sent to your email.
             </p>
@@ -261,12 +261,16 @@ export class SecurityComponent implements OnDestroy {
   enable2FA(): void {
     this.enabling2FA.set(true);
     this.userService.enable2FA().subscribe({
-      next: () => {
+      next: (res) => {
+        console.log(res);
+        
         this.show2FAModal.set(true);
         this._startOtpCountdown();
         this.enabling2FA.set(false);
       },
       error: err => {
+        console.log(err);
+        
         this.uiStore.error('Failed', extractBackendError(err));
         this.enabling2FA.set(false);
       },
@@ -276,16 +280,20 @@ export class SecurityComponent implements OnDestroy {
   confirm2FA(): void {
     if (this.otpValue().length < 6) return;
     this.confirming2FA.set(true);
-    this.userService.confirm2FA({ OTP: this.otpValue() }).subscribe({
-      next: () => {
+    this.userService.confirm2FA({ otp: this.otpValue() }).subscribe({
+      next: (res) => {
+        console.log(res);
+        
         const user = this.authStore.user();
-        if (user) this.authStore.setUser({ ...user, twoStepVerification: true });
+        if (user) this.authStore.setUser({ ...user, isTwoFactorEnabled: true });
         this.uiStore.success('2FA enabled!', 'Your account is now more secure.');
         this.show2FAModal.set(false);
         this._clearTimer();
         this.confirming2FA.set(false);
       },
       error: err => {
+        console.log(err);
+        
         this.uiStore.error('Invalid code', extractBackendError(err));
         this.confirming2FA.set(false);
       },

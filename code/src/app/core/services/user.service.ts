@@ -50,13 +50,13 @@ export class UserService {
   // 2FA - uses exact backend URL spelling (typo included)
   enable2FA(): Observable<ApiResponse<{ qrCode?: string; message?: string }>> {
     return this.http.patch<ApiResponse<{ qrCode?: string; message?: string }>>(
-      `${this.base}/enable-2Step-veverification`, {}
+      `${this.base}/enable-2Step-Verification`, {}
     );
   }
 
-  confirm2FA(payload: { OTP: string }): Observable<ApiResponse<void>> {
+  confirm2FA(payload: { otp: string }): Observable<ApiResponse<void>> {
     return this.http.patch<ApiResponse<void>>(
-      `${this.base}/confirm-2Step-veverification`, payload
+      `${this.base}/confirm-2Step-Verification`, payload
     );
   }
 }

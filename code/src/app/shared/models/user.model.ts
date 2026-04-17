@@ -11,7 +11,7 @@ export interface User {
   profilePicture?: string | undefined
   profileCover?: string | undefined;
   confirmEmail: boolean;
-  twoStepVerification: boolean;
+  isTwoFactorEnabled: boolean;
   createdAt: string;
   updatedAt: string;
   phone?: string;

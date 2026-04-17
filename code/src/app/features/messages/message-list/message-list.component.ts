@@ -210,7 +210,7 @@ export class MessageListComponent implements OnInit, OnDestroy {
     if (!silent) this.messageStore.setLoading(true);
 
     this.messageService.getMessages().subscribe({
-      next: (res) => {        
+      next: (res) => { 
         if (res.data) {
           this.messageStore.setMessages(res.data);
           this.messageStore.setTotal(res.data.length);
@@ -218,7 +218,7 @@ export class MessageListComponent implements OnInit, OnDestroy {
         this.messageStore.setLoading(false);
         this.isLoading.set(false);
       },
-      error: (err) => {        
+      error: (err) => {       
         this.messageStore.setLoading(false);
         this.isLoading.set(false);
       },
